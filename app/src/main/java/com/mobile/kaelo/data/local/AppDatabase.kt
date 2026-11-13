@@ -9,7 +9,7 @@ import com.mobile.kaelo.data.local.entity.HabitRecordEntity
 
 @Database(
     entities = [HabitEntity::class, HabitRecordEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

@@ -1,11 +1,10 @@
 package com.mobile.kaelo.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,15 +25,18 @@ fun HabitItemCard(
     habit: HabitEntity,
     isCompleted: Boolean,
     onToggle: (Boolean) -> Unit,
+    onEditClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp), // Canto arredondado e orgânico
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onEditClick() },
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondary // VerdeFolha (fundo do card)
+            containerColor = MaterialTheme.colorScheme.secondary
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp) // Sem sombra, estilo flat
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier
@@ -43,22 +45,18 @@ fun HabitItemCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // Futuramente, mapearemos o habit.iconName para um Icon de verdade.
-                // Por enquanto, o texto puro já resolve a estrutura visual.
-                Text(
-                    text = habit.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSecondary // TextoLight
-                )
-            }
+            Text(
+                text = habit.name,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSecondary
+            )
             Switch(
                 checked = isCompleted,
                 onCheckedChange = onToggle,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
-                    checkedTrackColor = MaterialTheme.colorScheme.primary, // VerdeKairos
+                    checkedTrackColor = MaterialTheme.colorScheme.primary,
                     uncheckedThumbColor = MaterialTheme.colorScheme.outline,
                     uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
                 )

@@ -19,6 +19,25 @@ class AddEditHabitViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AddEditHabitUiState())
     val uiState = _uiState.asStateFlow()
 
+    private var currentHabitId: Long? = null
+
+    // Busca o hábito no banco e preenche a tela
+    fun loadHabit(habitId: Long) {
+        if (currentHabitId == habitId) return
+        currentHabitId = habitId
+        viewModelScope.launch {
+            repository.getHabitById(habitId)?.let { habit ->
+                _uiState.update {
+                    it.copy(
+                        name = habit.name,
+                        selectedIcon = habit.iconName,
+                        selectedColor = habit.colorHex
+                    )
+                }
+            }
+        }
+    }
+
     fun onNameChange(newName: String) {
         _uiState.update { it.copy(name = newName) }
     }
@@ -27,15 +46,29 @@ class AddEditHabitViewModel @Inject constructor(
         val currentState = _uiState.value
         if (currentState.name.isNotBlank()) {
             viewModelScope.launch {
-                repository.insertHabit(
-                    HabitEntity(
-                        name = currentState.name,
-                        iconName = currentState.selectedIcon,
-                        colorHex = currentState.selectedColor
-                    )
+                val habit = HabitEntity(
+                    id = currentHabitId ?: 0,
+                    name = currentState.name,
+                    iconName = currentState.selectedIcon,
+                    colorHex = currentState.selectedColor
                 )
-                // Após salvar no banco, avisa a tela para fechar e voltar
+                if (currentHabitId != null) {
+                    repository.updateHabit(habit)
+                } else {
+                    repository.insertHabit(habit)
+                }
                 onSaveComplete()
+            }
+        }
+    }
+
+    fun deleteHabit(onDeleteComplete: () -> Unit) {
+        currentHabitId?.let { id ->
+            viewModelScope.launch {
+                repository.getHabitById(id)?.let { habit ->
+                    repository.deleteHabit(habit)
+                    onDeleteComplete()
+                }
             }
         }
     }

@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.toRoute
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -40,7 +41,7 @@ fun MainScreen() {
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar(
-                    containerColor = MaterialTheme.colorScheme.background // Garante o fundo correto
+                    containerColor = MaterialTheme.colorScheme.background
                 ) {
                     NavigationBarItem(
                         icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
@@ -48,9 +49,9 @@ fun MainScreen() {
                         selected = currentDestination?.hierarchy?.any { it.hasRoute(Screen.Home::class) } == true,
                         alwaysShowLabel = true, // Força o texto a aparecer
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.primary, // Ícone Verde
-                            selectedTextColor = MaterialTheme.colorScheme.primary, // Texto Verde
-                            indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), // Fundo da pílula transparente
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
+                            indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                             unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                             unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),

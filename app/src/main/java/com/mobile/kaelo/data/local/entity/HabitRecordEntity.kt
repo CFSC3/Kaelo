@@ -19,5 +19,6 @@ data class HabitRecordEntity(
     val habitId: Long,
     val date: String,
     val isCompleted: Boolean,
+    val isRetroactive: Boolean = false,
     val updatedAt: Long = System.currentTimeMillis()
 )

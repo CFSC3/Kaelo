@@ -11,6 +11,7 @@ interface HabitRepository {
     suspend fun updateHabit(habit: HabitEntity)
     suspend fun deleteHabit(habit: HabitEntity)
 
+    fun getAllRecords(): Flow<List<HabitRecordEntity>>
     fun getRecordsForHabit(habitId: Long): Flow<List<HabitRecordEntity>>
     fun getRecordsForDate(date: String): Flow<List<HabitRecordEntity>>
     suspend fun upsertHabitRecord(record: HabitRecordEntity)

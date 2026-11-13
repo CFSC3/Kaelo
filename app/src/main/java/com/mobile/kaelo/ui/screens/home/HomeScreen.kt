@@ -40,6 +40,7 @@ import java.time.LocalDate
 @Composable
 fun HomeScreen(
     onNavigateToAddHabit: () -> Unit,
+    onNavigateToEditHabit: (Long) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -97,6 +98,8 @@ fun HomeScreen(
 
             WeekStreakRow(
                 weekDays = uiState.currentWeekDays,
+                selectedDate = uiState.selectedDate,
+                onDateClick = { date -> viewModel.selectDate(date) },
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
@@ -110,7 +113,10 @@ fun HomeScreen(
                         habit = habit,
                         isCompleted = uiState.completedHabitIds.contains(habit.id),
                         onToggle = { isChecked ->
-                            viewModel.onToggleHabit(habit.id, LocalDate.now(), isChecked)
+                            viewModel.onToggleHabit(habit.id, isChecked)
+                        },
+                        onEditClick = {
+                            onNavigateToEditHabit(habit.id)
                         }
                     )
                 }

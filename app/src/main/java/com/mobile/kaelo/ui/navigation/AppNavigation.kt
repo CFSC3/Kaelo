@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.mobile.kaelo.ui.screens.add_edit.AddEditHabitScreen
 import com.mobile.kaelo.ui.screens.home.HomeScreen
 import com.mobile.kaelo.ui.screens.progress.ProgressScreen
@@ -15,8 +16,8 @@ import com.mobile.kaelo.ui.screens.settings.SettingsScreen
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(
-    navController: NavHostController, // Agora recebido via parâmetro
-    modifier: Modifier = Modifier // Recebe o espaçamento da barra inferior
+    navController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
@@ -27,6 +28,9 @@ fun AppNavigation(
             HomeScreen(
                 onNavigateToAddHabit = {
                     navController.navigate(Screen.AddEditHabit(null))
+                },
+                onNavigateToEditHabit = { habitId ->
+                    navController.navigate(Screen.AddEditHabit(habitId))
                 }
             )
         }
@@ -39,12 +43,14 @@ fun AppNavigation(
             SettingsScreen()
         }
 
-        composable<Screen.AddEditHabit> {
+        composable<Screen.AddEditHabit> { backStackEntry ->
+            val args = backStackEntry.toRoute<Screen.AddEditHabit>()
             AddEditHabitScreen(
+                habitId = args.habitId,
                 onNavigateBack = {
                     navController.popBackStack()
                 }
             )
         }
+        }
     }
-}

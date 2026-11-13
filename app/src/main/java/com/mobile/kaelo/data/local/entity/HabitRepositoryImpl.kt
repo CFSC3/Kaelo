@@ -13,6 +13,8 @@ class HabitRepositoryImpl @Inject constructor(
     private val recordDao: HabitRecordDao
 ) : HabitRepository {
 
+    override fun getAllRecords() = recordDao.getAllRecords()
+
     override fun getAllActiveHabits(): Flow<List<HabitEntity>> {
         return habitDao.getAllActiveHabits()
     }
@@ -44,4 +46,5 @@ class HabitRepositoryImpl @Inject constructor(
     override suspend fun upsertHabitRecord(record: HabitRecordEntity) {
         recordDao.upsertHabitRecord(record)
     }
+
 }

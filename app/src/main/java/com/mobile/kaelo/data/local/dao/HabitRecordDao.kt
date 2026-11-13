@@ -16,7 +16,10 @@ interface HabitRecordDao {
     @Query("SELECT * FROM habit_records WHERE date = :date")
     fun getRecordsForDate(date: String): Flow<List<HabitRecordEntity>>
 
-    // @Upsert insere o registro se não existir, ou atualiza se já existir (graças ao Index unique)
+    @Query("SELECT * FROM habit_records")
+    fun getAllRecords(): Flow<List<HabitRecordEntity>>
+
+    // @Upsert insere o registro se não existir, ou atualiza se já existir
     @Upsert
     suspend fun upsertHabitRecord(record: HabitRecordEntity)
 }
