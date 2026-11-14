@@ -31,10 +31,8 @@ class HomeViewModel @Inject constructor(
         loadHomeData()
     }
 
-    // Função para viajar no tempo
     fun selectDate(date: LocalDate) {
         val today = LocalDate.now()
-        // Bloqueia o futuro! Só permite hoje ou passado.
         if (!date.isAfter(today)) {
             _uiState.update { it.copy(selectedDate = date) }
         }
@@ -46,7 +44,6 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(currentWeekDays = weekDays) }
 
         viewModelScope.launch {
-            // Escuta os hábitos, TODOS os registros e a mudança de data simultaneamente
             combine(
                 repository.getAllActiveHabits(),
                 repository.getAllRecords(),
@@ -55,18 +52,20 @@ class HomeViewModel @Inject constructor(
 
                 val selectedDateStr = selectedDate.toString()
 
-                // 1. Marcações da tela atual
+                val visibleHabits = habitsList.filter { habit ->
+                    habit.createdAt <= selectedDateStr
+                }
+
                 val completedIds = allRecords
                     .filter { it.date == selectedDateStr && it.isCompleted }
                     .map { it.habitId }
                     .toSet()
 
-                // 2. Calcula o Foguinho com as regras de negócio da Luz
                 val streak = calculateStreak(allRecords)
 
                 HomeUiState(
                     isLoading = false,
-                    habits = habitsList,
+                    habits = visibleHabits,
                     currentWeekDays = weekDays,
                     selectedDate = selectedDate,
                     currentStreak = streak,
@@ -79,18 +78,18 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun calculateStreak(allRecords: List<HabitRecordEntity>): Int {
-        // Regra 1: Ignora fraudes (retroativos) e tarefas não concluídas
+        // Ignora fraudes e tarefas não concluídas
         val validRecords = allRecords.filter { it.isCompleted && !it.isRetroactive }
         val recordsByDate = validRecords.groupBy { it.date }
 
         var currentStreak = 0
         var checkDate = LocalDate.now()
 
-        // Regra 2: Verifica se bateu a meta de 2 hábitos HOJE
+        // Verifica se bateu a meta de 2 hábitos
         val didToday = (recordsByDate[checkDate.toString()]?.size ?: 0) >= 2
         if (didToday) currentStreak++
 
-        // Regra 3: Volta no tempo para somar os dias seguidos anteriores
+        // Volta no tempo para somar os dias seguidos anteriores
         checkDate = checkDate.minusDays(1)
         while (true) {
             val count = recordsByDate[checkDate.toString()]?.size ?: 0
@@ -98,7 +97,7 @@ class HomeViewModel @Inject constructor(
                 currentStreak++
                 checkDate = checkDate.minusDays(1)
             } else {
-                // Se um dia no passado não bateu a meta, quebra a sequência imediatamente
+                //Se um dia no passado não bateu a meta, quebra a sequência imediatamente
                 break
             }
         }
@@ -107,7 +106,7 @@ class HomeViewModel @Inject constructor(
 
     fun onToggleHabit(habitId: Long, isCompleted: Boolean) {
         val selectedDate = _uiState.value.selectedDate
-        // Regra 4: Se o dia selecionado for antes de hoje, é marcado como fraude/retroativo
+        // Se o dia selecionado for antes de hoje, é marcado como fraude/retroativo
         val isRetroactive = selectedDate.isBefore(LocalDate.now())
 
         viewModelScope.launch {

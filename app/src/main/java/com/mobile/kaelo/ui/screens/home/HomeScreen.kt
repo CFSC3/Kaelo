@@ -2,7 +2,6 @@ package com.mobile.kaelo.ui.screens.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,24 +25,30 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mobile.kaelo.ui.components.HabitItemCard
 import com.mobile.kaelo.ui.components.WeekStreakRow
-import java.time.LocalDate
+import com.mobile.kaelo.ui.screens.add_edit.AddEditHabitBottomSheet
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onNavigateToAddHabit: () -> Unit,
-    onNavigateToEditHabit: (Long) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // Variáveis de controle do Bottom Sheet
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var habitIdToEdit by remember { mutableStateOf<Long?>(null) }
 
     Scaffold(
         topBar = {
@@ -56,7 +61,6 @@ fun HomeScreen(
                     )
                 },
                 actions = {
-                    // Badge de Sequência (Amarelo Aurora)
                     Surface(
                         shape = RoundedCornerShape(16.dp),
                         color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f)
@@ -78,14 +82,13 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onNavigateToAddHabit,
-                containerColor = MaterialTheme.colorScheme.primary // VerdeKairos
+                onClick = {
+                    habitIdToEdit = null
+                    showBottomSheet = true
+                },
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Novo Hábito",
-                    tint = Color.White
-                )
+                Icon(Icons.Default.Add, contentDescription = "Novo Hábito", tint = Color.White)
             }
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -95,7 +98,6 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-
             WeekStreakRow(
                 weekDays = uiState.currentWeekDays,
                 selectedDate = uiState.selectedDate,
@@ -116,11 +118,19 @@ fun HomeScreen(
                             viewModel.onToggleHabit(habit.id, isChecked)
                         },
                         onEditClick = {
-                            onNavigateToEditHabit(habit.id)
+                            habitIdToEdit = habit.id
+                            showBottomSheet = true
                         }
                     )
                 }
             }
+        }
+
+        if (showBottomSheet) {
+            AddEditHabitBottomSheet(
+                habitId = habitIdToEdit,
+                onDismiss = { showBottomSheet = false }
+            )
         }
     }
 }
