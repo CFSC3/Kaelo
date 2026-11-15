@@ -62,7 +62,7 @@ O Kaelo foi construído seguindo as melhores práticas do desenvolvimento Androi
 
 | Tela Principal (Home) | Progresso Diário | Conquistas Mensais | Ajustes |
 | :---: | :---: | :---: | :---: |
-| <img src="https://github.com/CFSC3/Kaelo/blob/main/imagens/img1.jpg" width="220"> | <img src="https://github.com/CFSC3/Kaelo/blob/main/imagens/img2.jpg" width="220"> | <img src="https://github.com/CFSC3/Kaelo/blob/main/imagens/img3.jpg" width="220"> | <img src="https://github.com/CFSC3/Kaelo/blob/main/imagens/img4.jpg" width="220"> |
+| <img src="https://github.com/CFSC3/Kaelo/blob/main/imagens/img1.jpeg" width="220"> | <img src="https://github.com/CFSC3/Kaelo/blob/main/imagens/img2.jpeg" width="220"> | <img src="https://github.com/CFSC3/Kaelo/blob/main/imagens/img3.jpeg" width="220"> | <img src="https://github.com/CFSC3/Kaelo/blob/main/imagens/img4.jpeg" width="220"> |
 
 ---
 
