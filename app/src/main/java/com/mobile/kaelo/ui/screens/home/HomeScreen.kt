@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -105,6 +107,8 @@ fun HomeScreen(
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
+            val isPastDay = uiState.selectedDate.isBefore(java.time.LocalDate.now())
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
@@ -114,6 +118,7 @@ fun HomeScreen(
                     HabitItemCard(
                         habit = habit,
                         isCompleted = uiState.completedHabitIds.contains(habit.id),
+                        isPastDay = isPastDay,
                         onToggle = { isChecked ->
                             viewModel.onToggleHabit(habit.id, isChecked)
                         },

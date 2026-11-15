@@ -13,5 +13,7 @@ sealed interface Screen {
     data object Settings : Screen
 
     @Serializable
+    data object Achievements : Screen
+    @Serializable
     data class AddEditHabit(val habitId: Long? = null) : Screen
 }

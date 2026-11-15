@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.mobile.kaelo.ui.screens.achievements.AchievementsScreen
 import com.mobile.kaelo.ui.screens.home.HomeScreen
 import com.mobile.kaelo.ui.screens.progress.ProgressScreen
 import com.mobile.kaelo.ui.screens.settings.SettingsScreen
@@ -32,6 +33,10 @@ fun AppNavigation(
 
         composable<Screen.Settings> {
             SettingsScreen()
+        }
+
+        composable<Screen.Achievements> {
+            AchievementsScreen()
         }
     }
 }

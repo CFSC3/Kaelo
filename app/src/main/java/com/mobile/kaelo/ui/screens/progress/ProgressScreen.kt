@@ -185,10 +185,11 @@ fun ProgressScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    // Card Válidos (Verde)
                     Card(
                         modifier = Modifier.weight(1f),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
+                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                         )
                     ) {
                         Column(
@@ -199,21 +200,22 @@ fun ProgressScreen(
                                 text = uiState.completedHabitsCount.toString(),
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.secondary
+                                color = MaterialTheme.colorScheme.primary
                             )
 
                             Text(
                                 text = "Válidos",
                                 style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.secondary
+                                color = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
 
+                    // Card Ativos (Amarelo)
                     Card(
                         modifier = Modifier.weight(1f),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f)
+                            containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f)
                         )
                     ) {
                         Column(

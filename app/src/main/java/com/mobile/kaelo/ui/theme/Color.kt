@@ -16,5 +16,7 @@ val SuperficieLight = Color(0xFFFFFFFF)
 val SuperficieDark = Color(0xFF1E2320)
 
 // Cores de Texto e Contraste
-val TextoLight = Color(0xFF1A1C1A) // Quase preto
-val TextoDark = Color(0xFFE2E3E2)  // Quase branco
+val TextoLight = Color(0xFF1A1C1A)
+val TextoDark = Color(0xFFE2E3E2)
+
+val ErroVermelho = Color(0xFFE53935)

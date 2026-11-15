@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
@@ -35,6 +36,7 @@ fun MainScreen() {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.background
             ) {
+                // Botão Home
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
                     label = { Text("Home") },
@@ -55,6 +57,8 @@ fun MainScreen() {
                         }
                     }
                 )
+
+                // Botão Progresso
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Star, contentDescription = "Progresso") },
                     label = { Text("Progresso") },
@@ -75,6 +79,30 @@ fun MainScreen() {
                         }
                     }
                 )
+
+                // Botão Conquistas
+                NavigationBarItem(
+                    icon = { Icon(Icons.Default.EmojiEvents, contentDescription = "Conquistas") },
+                    label = { Text("Conquistas") },
+                    selected = currentDestination?.hierarchy?.any { it.route == Screen.Achievements::class.qualifiedName } == true,
+                    alwaysShowLabel = true,
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
+                    onClick = {
+                        navController.navigate(Screen.Achievements) {
+                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
+
+                // Botão Ajustes
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Settings, contentDescription = "Ajustes") },
                     label = { Text("Ajustes") },
@@ -100,7 +128,7 @@ fun MainScreen() {
     ) { innerPadding ->
         AppNavigation(
             navController = navController,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
         )
     }
 }

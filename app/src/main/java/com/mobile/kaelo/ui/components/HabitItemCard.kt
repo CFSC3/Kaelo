@@ -24,6 +24,7 @@ import com.mobile.kaelo.data.local.entity.HabitEntity
 fun HabitItemCard(
     habit: HabitEntity,
     isCompleted: Boolean,
+    isPastDay: Boolean,
     onToggle: (Boolean) -> Unit,
     onEditClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -31,10 +32,10 @@ fun HabitItemCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onEditClick() },
+            .clickable(enabled = !isPastDay) { onEditClick() },
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondary
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -49,18 +50,31 @@ fun HabitItemCard(
                 text = habit.name,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSecondary
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Switch(
-                checked = isCompleted,
-                onCheckedChange = onToggle,
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                    uncheckedThumbColor = MaterialTheme.colorScheme.outline,
-                    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
+
+            if (isPastDay) {
+                val statusColor = if (isCompleted) Color(0xFF43A047) else Color(0xFFE53935)
+                val statusText = if (isCompleted) "Concluído" else "Falhou"
+
+                Text(
+                    text = statusText,
+                    color = statusColor,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.labelMedium
                 )
-            )
+            } else {
+                Switch(
+                    checked = isCompleted,
+                    onCheckedChange = onToggle,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = MaterialTheme.colorScheme.primary,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surface
+                    )
+                )
+            }
         }
     }
 }
