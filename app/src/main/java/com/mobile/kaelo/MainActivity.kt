@@ -21,6 +21,8 @@ import android.content.Context
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import android.content.pm.PackageManager
+import androidx.compose.runtime.setValue
+import com.mobile.kaelo.ui.screens.SplashScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -43,11 +45,18 @@ class MainActivity : ComponentActivity() {
         askNotificationPermission()
 
         setContent {
-
             val isDarkMode by themePreferences.isDarkMode.collectAsStateWithLifecycle(initialValue = false)
 
             KaeloTheme(darkTheme = isDarkMode) {
-                MainScreen()
+                var showSplash by androidx.compose.runtime.remember {
+                    androidx.compose.runtime.mutableStateOf(true)
+                }
+
+                if (showSplash) {
+                    SplashScreen(onTimeout = { showSplash = false })
+                } else {
+                    MainScreen()
+                }
             }
         }
     }
